@@ -3,204 +3,154 @@
 <head>
     <title>CMS Tutorial Series</title>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-            transition: 0.3s;
-        }
-
-        .dark {
-            background: #121212;
-            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f0f0f;
+            color: #fff;
         }
 
         /* HEADER */
         .header {
-            background: linear-gradient(90deg, #007bff, #00c6ff);
-            color: white;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header h1 {
-            margin: 0;
-        }
-
-        .controls {
-            display: flex;
-            gap: 10px;
-        }
-
-        .search {
-            padding: 8px;
-            border-radius: 5px;
-            border: none;
-        }
-
-        .toggle-btn {
-            padding: 8px 12px;
-            border: none;
-            background: black;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        /* MAIN */
-        .main {
-            display: flex;
-            width: 90%;
-            margin: 20px auto;
-            gap: 20px;
+            padding: 15px 30px;
+            font-size: 22px;
+            font-weight: bold;
+            background: #141414;
+            border-bottom: 1px solid #222;
         }
 
         /* VIDEO PLAYER */
-        .video-player {
-            flex: 2;
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .dark .video-player {
-            background: #1e1e1e;
+        .player-container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 0 15px;
         }
 
         iframe {
             width: 100%;
-            height: 450px;
+            height: 60vh;
             border-radius: 10px;
+            border: none;
         }
 
-        /* PLAYLIST */
-        .playlist {
-            flex: 1;
-            background: white;
-            border-radius: 10px;
-            overflow-y: auto;
-            max-height: 500px;
+        .video-title {
+            margin-top: 10px;
+            font-size: 18px;
         }
 
-        .dark .playlist {
-            background: #1e1e1e;
+        /* SECTION */
+        .section {
+            margin: 30px 0;
+            padding: 0 20px;
         }
 
-        .video-item {
+        .section h2 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        /* ROW (Netflix style) */
+        .row {
             display: flex;
+            overflow-x: auto;
             gap: 10px;
-            padding: 10px;
+            padding-bottom: 10px;
+        }
+
+        .row::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* VIDEO CARD */
+        .card {
+            min-width: 220px;
             cursor: pointer;
-            border-bottom: 1px solid #ddd;
-            align-items: center;
+            transition: transform 0.3s;
         }
 
-        .dark .video-item {
-            border-bottom: 1px solid #333;
+        .card:hover {
+            transform: scale(1.05);
         }
 
-        .video-item:hover {
-            background: #f1f1f1;
+        .card img {
+            width: 100%;
+            border-radius: 8px;
         }
 
-        .dark .video-item:hover {
-            background: #333;
+        .card-title {
+            font-size: 14px;
+            margin-top: 5px;
         }
 
-        .video-item img {
-            width: 80px;
-            height: 50px;
-            border-radius: 5px;
-        }
+        /* MOBILE */
+        @media (max-width: 768px) {
+            iframe {
+                height: 220px;
+            }
 
-        .active {
-            background: #dfefff;
-        }
-
-        .dark .active {
-            background: #444;
+            .card {
+                min-width: 160px;
+            }
         }
     </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
 <div class="header">
-    <h1>Course Registration Series</h1>
+    🎓 CMS Tutorial Series
+</div>
 
-    <div class="controls">
-        <input type="text" class="search" placeholder="Search videos..." onkeyup="searchVideos(this.value)">
-        <button class="toggle-btn" onclick="toggleDark()">🌙</button>
+<!-- VIDEO PLAYER -->
+<div class="player-container">
+    <iframe id="mainVideo"
+        src="https://drive.google.com/file/d/1v-K6CcbqCdNolYFBiwHY4qYtknaBDjSB/preview">
+    </iframe>
+
+    <div class="video-title" id="videoTitle">
+        Course Registration for Coordinators
     </div>
 </div>
 
-<div class="main">
+<!-- SECTION -->
+<div class="section">
+    <h2>📚 Course Registration</h2>
 
-    <!-- VIDEO -->
-    <div class="video-player">
-        <iframe id="mainVideo"
-            src="https://drive.google.com/file/d/1v-K6CcbqCdNolYFBiwHY4qYtknaBDjSB/preview"
-            allowfullscreen>
-        </iframe>
-    </div>
+    <div class="row">
 
-    <!-- PLAYLIST -->
-    <div class="playlist" id="playlist">
-
-        <div class="video-item active"
-            data-title="Course Registration for Coordinators"
-            onclick="playVideo('1v-K6CcbqCdNolYFBiwHY4qYtknaBDjSB', this)">
-            <img src="https://via.placeholder.com/80x50">
-            <span>Course Registration for Coordinators</span>
+        <div class="card"
+            onclick="playVideo('1v-K6CcbqCdNolYFBiwHY4qYtknaBDjSB','Course Registration for Coordinators')">
+            <img src="https://via.placeholder.com/300x170">
+            <div class="card-title">Course Registration for Coordinators</div>
         </div>
 
-        <div class="video-item"
-            data-title="Add Drop Courses"
-            onclick="playVideo('FILE_ID_2', this)">
-            <img src="https://via.placeholder.com/80x50">
-            <span>Add/Drop Courses</span>
+        <div class="card"
+            onclick="playVideo('FILE_ID_2','Add/Drop Courses')">
+            <img src="https://via.placeholder.com/300x170">
+            <div class="card-title">Add/Drop Courses</div>
         </div>
 
-        <div class="video-item"
-            data-title="Final Submission"
-            onclick="playVideo('FILE_ID_3', this)">
-            <img src="https://via.placeholder.com/80x50">
-            <span>Final Submission</span>
+        <div class="card"
+            onclick="playVideo('FILE_ID_3','Final Submission')">
+            <img src="https://via.placeholder.com/300x170">
+            <div class="card-title">Final Submission</div>
         </div>
 
     </div>
-
 </div>
 
 <script>
-
-function playVideo(id, element) {
+function playVideo(id, title) {
     document.getElementById("mainVideo").src =
         "https://drive.google.com/file/d/" + id + "/preview";
 
-    let items = document.querySelectorAll(".video-item");
-    items.forEach(item => item.classList.remove("active"));
-
-    element.classList.add("active");
+    document.getElementById("videoTitle").innerText = title;
 }
-
-function searchVideos(query) {
-    let items = document.querySelectorAll(".video-item");
-    query = query.toLowerCase();
-
-    items.forEach(item => {
-        let title = item.getAttribute("data-title").toLowerCase();
-        item.style.display = title.includes(query) ? "flex" : "none";
-    });
-}
-
-function toggleDark() {
-    document.body.classList.toggle("dark");
-}
-
 </script>
 
 </body>
