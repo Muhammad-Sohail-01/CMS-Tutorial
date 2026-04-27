@@ -8,21 +8,49 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background: #f4f6f9;
+            transition: 0.3s;
+        }
+
+        .dark {
+            background: #121212;
+            color: white;
         }
 
         /* HEADER */
         .header {
             background: linear-gradient(90deg, #007bff, #00c6ff);
             color: white;
-            padding: 20px;
-            text-align: center;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .header h1 {
             margin: 0;
         }
 
-        /* MAIN LAYOUT */
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search {
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .toggle-btn {
+            padding: 8px 12px;
+            border: none;
+            background: black;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* MAIN */
         .main {
             display: flex;
             width: 90%;
@@ -36,10 +64,13 @@
             background: white;
             padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
-        .video-player iframe {
+        .dark .video-player {
+            background: #1e1e1e;
+        }
+
+        iframe {
             width: 100%;
             height: 450px;
             border-radius: 10px;
@@ -50,48 +81,65 @@
             flex: 1;
             background: white;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             overflow-y: auto;
             max-height: 500px;
         }
 
-        .playlist h3 {
-            margin: 0;
-            padding: 15px;
-            background: #eee;
-            border-radius: 10px 10px 0 0;
+        .dark .playlist {
+            background: #1e1e1e;
         }
 
         .video-item {
-            padding: 12px;
+            display: flex;
+            gap: 10px;
+            padding: 10px;
             cursor: pointer;
             border-bottom: 1px solid #ddd;
-            transition: 0.3s;
+            align-items: center;
+        }
+
+        .dark .video-item {
+            border-bottom: 1px solid #333;
         }
 
         .video-item:hover {
             background: #f1f1f1;
         }
 
+        .dark .video-item:hover {
+            background: #333;
+        }
+
+        .video-item img {
+            width: 80px;
+            height: 50px;
+            border-radius: 5px;
+        }
+
         .active {
             background: #dfefff;
-            font-weight: bold;
+        }
+
+        .dark .active {
+            background: #444;
         }
     </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="header">
     <h1>Course Registration Series</h1>
-    <p>Learn step-by-step CMS course registration process</p>
+
+    <div class="controls">
+        <input type="text" class="search" placeholder="Search videos..." onkeyup="searchVideos(this.value)">
+        <button class="toggle-btn" onclick="toggleDark()">🌙</button>
+    </div>
 </div>
 
-<!-- MAIN CONTENT -->
 <div class="main">
 
-    <!-- VIDEO PLAYER -->
+    <!-- VIDEO -->
     <div class="video-player">
         <iframe id="mainVideo"
             src="https://drive.google.com/file/d/1v-K6CcbqCdNolYFBiwHY4qYtknaBDjSB/preview"
@@ -100,22 +148,27 @@
     </div>
 
     <!-- PLAYLIST -->
-    <div class="playlist">
-        <h3>Playlist</h3>
+    <div class="playlist" id="playlist">
 
         <div class="video-item active"
+            data-title="Course Registration for Coordinators"
             onclick="playVideo('1v-K6CcbqCdNolYFBiwHY4qYtknaBDjSB', this)">
-            ▶ Course Registration for Coordinators
+            <img src="https://via.placeholder.com/80x50">
+            <span>Course Registration for Coordinators</span>
         </div>
 
         <div class="video-item"
+            data-title="Add Drop Courses"
             onclick="playVideo('FILE_ID_2', this)">
-            ▶ Add/Drop Courses
+            <img src="https://via.placeholder.com/80x50">
+            <span>Add/Drop Courses</span>
         </div>
 
         <div class="video-item"
+            data-title="Final Submission"
             onclick="playVideo('FILE_ID_3', this)">
-            ▶ Final Submission
+            <img src="https://via.placeholder.com/80x50">
+            <span>Final Submission</span>
         </div>
 
     </div>
@@ -123,17 +176,31 @@
 </div>
 
 <script>
-    function playVideo(id, element) {
-        document.getElementById("mainVideo").src =
-            "https://drive.google.com/file/d/" + id + "/preview";
 
-        // remove active class
-        let items = document.querySelectorAll(".video-item");
-        items.forEach(item => item.classList.remove("active"));
+function playVideo(id, element) {
+    document.getElementById("mainVideo").src =
+        "https://drive.google.com/file/d/" + id + "/preview";
 
-        // add active class
-        element.classList.add("active");
-    }
+    let items = document.querySelectorAll(".video-item");
+    items.forEach(item => item.classList.remove("active"));
+
+    element.classList.add("active");
+}
+
+function searchVideos(query) {
+    let items = document.querySelectorAll(".video-item");
+    query = query.toLowerCase();
+
+    items.forEach(item => {
+        let title = item.getAttribute("data-title").toLowerCase();
+        item.style.display = title.includes(query) ? "flex" : "none";
+    });
+}
+
+function toggleDark() {
+    document.body.classList.toggle("dark");
+}
+
 </script>
 
 </body>
